@@ -14,13 +14,14 @@ ytypeLine: identifier '=' '{' 'use' '=' ('observationtype' | 'observationType') 
 admLine: identifier '=' '{' 'use' '=' 'administration' '}';
 occLine: identifier '=' '{' 'use' '=' 'occasion' '}';
 rateLine: identifier '=' '{' 'use' '=' 'rate' '}';
+durLine: identifier '=' '{' 'use' '=' 'infusiontime' '}';
 mdvLine: identifier '=' '{' 'use' '=' ('missingdependentvariable' | 'missingDependentVariable' ) '}';
 nbd: decimalint;
 ssLine: identifier '=' '{' 'use' '=' ('steadystate' | 'steadyState' ) (',' 'nbdoses' '=' nbd)? '}';
 regressorLine: identifier '=' '{' 'use' '=' 'regressor' '}';
 contLine: identifier '=' '{' 'use' '=' 'covariate' ',' 'type' '=' 'continuous' '}';
 catLine: identifier '=' '{' 'use' '=' 'covariate' ',' 'type' '=' 'categorical' '}';
-
+ignoreLine: identifier '=' '{' 'use' '=' ('ignore' | 'ignoreLine' | 'ignoreline' | 'ignored' | 'ignoredLine' | 'ignoredline') '}';
 ytypeType: char_t1 | char_t2 | identifier | number;
 ytypeOp1: 'ytype' '='  ytypeType;
 ytypeOp2: 'ytype' '=' '{' ytypeType (',' ytypeType)* '}';
@@ -65,8 +66,10 @@ statement: idLine singleLineComment?
     | admLine singleLineComment?
     | occLine singleLineComment?
     | rateLine singleLineComment?
+    | durLine singleLineComment?
     | mdvLine singleLineComment?
     | ssLine singleLineComment?
+    | ignoreLine singleLineComment?
     | regressorLine singleLineComment?
     | contLine singleLineComment?
     | catLine singleLineComment?

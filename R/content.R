@@ -22,7 +22,8 @@
         occasion=NA_character_,
         rate=NA_character_,
         additionaldose=NA_character_,
-        missingdependentvariable=NA_character_)
+        missingdependentvariable=NA_character_,
+        infusiontime=NA_character_)
     .monolix2rx$contLst <- character(0)
     .monolix2rx$ssNbdoses <- 7L
     .monolix2rx$yname <- character(0)
@@ -47,6 +48,7 @@
                cont=.monolix2rx$contLst,
                cat=.monolix2rx$catLst2,
                reg=.monolix2rx$regLst,
+               ignore=.monolix2rx$ignoreLst,
                nbdoses=.monolix2rx$ssNbdoses,
                yname=.monolix2rx$yname,
                ynameQuote=.monolix2rx$ynameQuote,
@@ -185,6 +187,7 @@ as.character.monolix2rxContent <- function(x, ...) {
   }, character(1), USE.NAMES = FALSE)
   c(.cur[!is.na(.cur)],
     .asCharacterReg(x),
+    .asCharacterIgnore(x),
     vapply(x$cont, function(n) {
       paste0(n, " = {use=covariate, type=continuous}")
     }, character(1), USE.NAMES = FALSE),

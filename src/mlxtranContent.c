@@ -73,6 +73,7 @@ extern sbuf curLine;
 int individual_process_catCov(const char *name, D_ParseNode *pn, int i);
 int individual_process_catId(const char *name, D_ParseNode *pn);
 int individual_process_regressor(const char *name, D_ParseNode *pn);
+int individual_process_ignore(const char *name, D_ParseNode *pn);
 
 int content_process_identifier(const char *name, D_ParseNode *pn) {
   if (!strcmp(name, "idLine")) {
@@ -179,6 +180,16 @@ int content_process_rate(const char *name, D_ParseNode *pn) {
     D_ParseNode *xpn = d_get_child(pn, 0);
     char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
     monolix2rxContentSetUse1("rate", v);
+    return 1;
+  }
+  return 0;
+}
+
+int content_process_dur(const char *name, D_ParseNode *pn) {
+  if (!strcmp(name, "durLine")) {
+    D_ParseNode *xpn = d_get_child(pn, 0);
+    char *v = (char*)rc_dup_str(xpn->start_loc.s, xpn->end);
+    monolix2rxContentSetUse1("infusiontime", v);
     return 1;
   }
   return 0;
@@ -308,6 +319,7 @@ void wprint_parsetree_content(D_ParserTables pt, D_ParseNode *pn, int depth, pri
   int nch = d_get_number_of_children(pn);
   if (individual_process_catId(name, pn) ||
       individual_process_regressor(name, pn) ||
+      individual_process_ignore(name, pn) ||
       content_process_identifier(name, pn) ||
       content_process_time(name, pn) ||
       content_process_evid(name, pn) ||
@@ -325,6 +337,7 @@ void wprint_parsetree_content(D_ParserTables pt, D_ParseNode *pn, int depth, pri
       content_process_cat(name, pn) ||
       content_process_occ(name, pn) ||
       content_process_rate(name, pn) ||
+      content_process_dur(name, pn) ||
       content_process_ytypeObs(name, pn) ||
       content_process_addl(name, pn) ||
       content_process_mdv(name, pn)
