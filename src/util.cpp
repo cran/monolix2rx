@@ -2,16 +2,11 @@
 #define STRICT_R_HEADERS
 #include <Rcpp.h>
 #include <R.h>
-#ifdef ENABLE_NLS
-#include <libintl.h>
-#define _(String) dgettext ("monolix2rx", String)
-/* replace pkg as appropriate */
-#else
 #define _(String) (String)
-#endif
 
 using namespace Rcpp;
 Function loadNamespace("loadNamespace", R_BaseNamespace);
+Function requireNamespace("requireNamespace", R_BaseNamespace);
 
 extern "C" SEXP monolix2rxSingle(const char *var, const char *fn) {
   BEGIN_RCPP
@@ -73,5 +68,27 @@ extern "C" SEXP monolix2rxPushCoefList(void) {
   Function pushCoefList(".pushCoefList", monolix2rxNs);
   pushCoefList();
   return R_NilValue;
+  END_RCPP
+}
+
+extern "C" SEXP _monolix2rxlixoftConnectors(void) {
+    BEGIN_RCPP
+      return requireNamespace("lixoftConnectors", _["quietly"] = true);
+    return R_NilValue;
+    END_RCPP
+}
+extern "C" SEXP _monolix2rxInitializeLixoftConnectors(SEXP software, SEXP force) {
+  BEGIN_RCPP
+  Environment ls = loadNamespace("lixoftConnectors");
+  Function initLixoftConnectors("initializeLixoftConnectors", ls);
+  return initLixoftConnectors(_["software"]=software, _["force"]=force);
+  END_RCPP
+}
+
+extern "C" SEXP _monolix2rxGetLibraryModelContent(SEXP filename) {
+  BEGIN_RCPP
+  Environment ls = loadNamespace("lixoftConnectors");
+  Function getLibraryModelContent("getLibraryModelContent", ls);
+  return getLibraryModelContent(_["filename"]=filename, _["print"]=false);
   END_RCPP
 }
